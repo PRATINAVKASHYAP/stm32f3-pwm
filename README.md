@@ -43,8 +43,8 @@ For using pins and timers, we need to enable the bus clocks, that's what we do i
 From the *STM Documentation* we know that _PD12_, _PD13_ correspond to _TIM4\_CH1_ and _TIM4\_CH3_ respectively. Also from the documentation we know that they need to be configured in _AF_4_ (Alternate function).
 
 ```c
-Prescaler = 72;
-Period = 20;
+Prescaler = 1;
+Period = 1440;
 
 // Timer Base configurations
 TIM_TimeBaseStructure.TIM_Period = Period / 2;
@@ -55,7 +55,7 @@ TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_CenterAligned1;
 TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
 ```
-For our use, we need a pwm signal of 50 khz. So we divide the system clock with 72 (72MHz/72 = 1 MHz, 1MHz/20 = 50kHz) and then set the period as 20. If we change the period when we have to change the prescaler as well to get the required 50kHz.
+For our use, we need a pwm signal of 50 khz. So we divide the system clock with 1 (72MHz/1 = 72 MHz, 72MHz/1440 = 50kHz) and then set the period as 1440. If we change the period when we have to change the prescaler as well to get the required 50kHz.
 
 ```c
 TIM_SetCompare1(TIM4, upPulse);
