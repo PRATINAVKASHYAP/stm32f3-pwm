@@ -44,7 +44,7 @@ From the *STM Documentation* we know that _PD12_, _PD13_ correspond to _TIM4\_CH
 
 ```c
 Prescaler = 1;
-Period = 1440;
+Period = floor(72000000/(frequency*1000)); //Period=1440 for 50kHz
 
 // Timer Base configurations
 TIM_TimeBaseStructure.TIM_Period = Period / 2;
@@ -67,6 +67,22 @@ CCR1 and CCR2 are used for TIM4_CH1 for specifying counter compare values which 
 Using the code we were able to generate the required pwm:
 
 ![shot2](/assets/shot2.png)
+
+##Inputs
+As you can see below the "TIM4_Configuration" function takes three inputs. The duty cycle, the phase shift required and the frequecy desired. Make sure to place the value of frequency in KHz. There in a limitation for the phase shift. It can only be anything between 0 to 180 at this moment. We will try and make that better.
+
+```c
+int main(void) {
+  RCC_Configuration();
+  GPIO_Configuration();
+  int phase_shift=180; // phaseshift from 0 to 180
+  float dc=0.576; // duty cycle can be anything from 0 to 1.
+  float freq=30; // any frequency in **" kHz "**.
+  TIM4_Configuration(dc, phase_shift, freq);
+  while (1)
+    ; /* Infinite loop */
+}
+```c 
 
 ## Timing signals
 
