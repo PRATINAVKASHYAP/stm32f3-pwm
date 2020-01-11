@@ -84,7 +84,13 @@ int main(void) {
     ; /* Infinite loop */
 }
 ```
+## Oscilloscope Output:
 
+These are few shots from the oscilloscope for various dutycycles at 50KHz:
+
+![output1](/assets/TEK0001.JPG)
+
+![output1](/assets/TEK0004.JPG)
 ## Timing signals
 
 Below are the timing signals which is required. As you can see we turn _pwm 1_ high at Counter value = 5 and then low at Counter value = 2. Similarly we specify values for _pwm 2_. Four Registers are needed to store these values (CCR1, CCR2, CCR3 & CCR4).
