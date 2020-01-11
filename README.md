@@ -68,7 +68,8 @@ Using the code we were able to generate the required pwm:
 
 ![shot2](/assets/shot2.png)
 
-##Inputs
+### Inputs:
+
 As you can see below the "TIM4_Configuration" function takes three inputs. The duty cycle, the phase shift required and the frequecy desired. Make sure to place the value of frequency in KHz. There in a limitation for the phase shift. It can only be anything between 0 to 180 at this moment. We will try and make that better.
 
 ```c
@@ -82,7 +83,7 @@ int main(void) {
   while (1)
     ; /* Infinite loop */
 }
-```c 
+```
 
 ## Timing signals
 
