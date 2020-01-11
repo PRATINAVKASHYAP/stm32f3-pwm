@@ -24,12 +24,12 @@ void GPIO_Configuration(void) {
   GPIO_PinAFConfig(GPIOD, GPIO_PinSource14, GPIO_AF_2);
 }
 
-void TIM4_Configuration(float d) {
+void TIM4_Configuration(float d, int phase, float frequency) {
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
   TIM_OCInitTypeDef TIM_OCInitStructure;
   int Prescaler, Period;
   Prescaler = 1;
-  Period = 1440;
+  Period = floor(72000000/(frequency*1000));
 
   TIM_TimeBaseStructure.TIM_Period = Period / 2;
   TIM_TimeBaseStructure.TIM_Prescaler = Prescaler - 1;
@@ -44,8 +44,15 @@ void TIM4_Configuration(float d) {
   TIM_OC1Init(TIM4, &TIM_OCInitStructure);
   TIM_OC2Init(TIM4, &TIM_OCInitStructure);
   int ontime = floor(d*Period);
-  //int offtime = Period-ontime;
-  int diff = ontime-Period/2;
+  int offtime = Period-ontime;
+  int fact;
+  if(phase!=0){
+  fact = 360/phase;
+  }
+  else{
+  fact = 0;
+  }
+  int diff = floor(ontime-Period/fact);
   int reference;
   if(d<.5){
   reference=(Period/2)*1;
@@ -64,7 +71,7 @@ void TIM4_Configuration(float d) {
   TIM_OC3Init(TIM4, &TIM_OCInitStructure);
   TIM_OC4Init(TIM4, &TIM_OCInitStructure);
   int upPulse2 = reference+diff;
-  int downPulse2 = downPulse1+diff;
+  int downPulse2 = Period/2-(offtime-(Period/2-upPulse2));
   TIM_SetCompare3(TIM4, upPulse2);
   TIM_SetCompare4(TIM4, downPulse2);
   /* TIM4 enable counter */
@@ -74,8 +81,10 @@ void TIM4_Configuration(float d) {
 int main(void) {
   RCC_Configuration();
   GPIO_Configuration();
-  float dc=0.005;
-  TIM4_Configuration(dc);
+  int phase_shift=180; // phaseshift from 0 to 180
+  float dc=0.55; // duty cycle can be anything from 0 to 1.
+  float freq=50; // any frequency in **" kHz "**.
+  TIM4_Configuration(dc, phase_shift, freq);
   while (1)
     ; /* Infinite loop */
 }
